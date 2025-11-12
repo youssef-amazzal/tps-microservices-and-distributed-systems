@@ -1,5 +1,7 @@
 package org.glsid.bankaccountmicroservice.services;
 
+import org.glsid.bankaccountmicroservice.entities.Customer;
+import org.glsid.bankaccountmicroservice.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,6 @@ import org.glsid.bankaccountmicroservice.entities.BankAccount;
 import org.glsid.bankaccountmicroservice.mappers.AccountMapper;
 import org.glsid.bankaccountmicroservice.repositories.BankAccountRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,13 +20,21 @@ import java.util.UUID;
 public class AccountServiceImp implements AccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final CustomerRepository customerRepository;
     private final AccountMapper accountMapper;
 
     @Override
     public BankAccountResponseDTO addAccount(BankAccountRequestDTO bankAccountRequestDTO) {
         BankAccount bankAccount = accountMapper.toBankAccount(bankAccountRequestDTO);
         bankAccount.setAccountId(UUID.randomUUID().toString());
-        bankAccount.setCreateAt(new Date());
+        bankAccount.setCreateAt(System.currentTimeMillis());
+
+        if (bankAccountRequestDTO.getCustomerId() != null) {
+            Customer customer = customerRepository.findById(bankAccountRequestDTO.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException(
+                            String.format("Customer %s not found", bankAccountRequestDTO.getCustomerId())));
+            bankAccount.setCustomer(customer);
+        }
 
         BankAccount savedAccount = bankAccountRepository.save(bankAccount);
         return accountMapper.fromBankAccount(savedAccount);
@@ -52,6 +61,13 @@ public class AccountServiceImp implements AccountService {
                 .orElseThrow(() -> new RuntimeException(String.format("Account %s not found", id)));
 
         accountMapper.updateBankAccountFromDTO(bankAccount, bankAccountRequestDTO);
+
+        if (bankAccountRequestDTO.getCustomerId() != null) {
+            Customer customer = customerRepository.findById(bankAccountRequestDTO.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException(
+                            String.format("Customer %s not found", bankAccountRequestDTO.getCustomerId())));
+            bankAccount.setCustomer(customer);
+        }
 
         BankAccount updatedAccount = bankAccountRepository.save(bankAccount);
         return accountMapper.fromBankAccount(updatedAccount);

@@ -19,6 +19,8 @@ public class AccountMapper {
                 .currency(bankAccount.getCurrency())
                 .type(bankAccount.getType())
                 .createAt(bankAccount.getCreateAt())
+                .customerId(bankAccount.getCustomer() != null ? bankAccount.getCustomer().getId() : null)
+                .customerName(bankAccount.getCustomer() != null ? bankAccount.getCustomer().getName() : null)
                 .build();
     }
 

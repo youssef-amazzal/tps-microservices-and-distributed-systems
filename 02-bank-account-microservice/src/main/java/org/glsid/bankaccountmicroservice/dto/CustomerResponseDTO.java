@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.glsid.bankaccountmicroservice.enums.AccountType;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BankAccountRequestDTO {
-    private Double balance;
-    private String currency;
-    private AccountType type;
-    private Long customerId;
+public class CustomerResponseDTO {
+    private Long id;
+    private String name;
+    private List<BankAccountResponseDTO> accounts;
 }
+

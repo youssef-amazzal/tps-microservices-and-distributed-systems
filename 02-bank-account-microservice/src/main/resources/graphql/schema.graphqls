@@ -1,0 +1,53 @@
+enum AccountType {
+    CURRENT_ACCOUNT
+    SAVING_ACCOUNT
+}
+
+type CustomerResponseDTO {
+    id: ID!
+    name: String!
+    accounts: [BankAccountResponseDTO!]
+}
+
+input CustomerRequestDTO {
+    name: String!
+}
+
+type BankAccountResponseDTO {
+    accountId: ID!
+    balance: Float!
+    currency: String!
+    type: AccountType!
+    createAt: Float!
+    customerId: ID
+    customerName: String
+}
+
+input BankAccountRequestDTO {
+    balance: Float!
+    currency: String!
+    type: AccountType!
+    customerId: ID
+}
+
+type Query {
+    accounts: [BankAccountResponseDTO!]!
+    accountById(id: ID!): BankAccountResponseDTO
+    customers: [CustomerResponseDTO!]!
+    customerById(id: ID!): CustomerResponseDTO
+}
+
+type Mutation {
+    createAccount(request: BankAccountRequestDTO!): BankAccountResponseDTO!
+    updateAccount(
+        id: ID!
+        request: BankAccountRequestDTO!
+    ): BankAccountResponseDTO!
+    deleteAccount(id: ID!): Boolean!
+    createCustomer(request: CustomerRequestDTO!): CustomerResponseDTO!
+    updateCustomer(
+        id: ID!
+        request: CustomerRequestDTO!
+    ): CustomerResponseDTO!
+    deleteCustomer(id: ID!): Boolean!
+}
