@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/02-bank-account-microservice/bank-account-microservice.iml" filepath="$PROJECT_DIR$/02-bank-account-microservice/bank-account-microservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/tps-microservices-and-distributed-systems.iml" filepath="$PROJECT_DIR$/tps-microservices-and-distributed-systems.iml" />
     </modules>
   </component>
